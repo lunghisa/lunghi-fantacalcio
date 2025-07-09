@@ -227,16 +227,20 @@ function App() {
     </tr>
   </thead>
   <tbody>
-    {players.map((p, i) => (
-      <tr key={i} style={{ color: playersOut.includes(p.name) ? "red" : "inherit" }}>
-        <td>{p.costo}</td>
-        <td>{p.name}</td>
-        <td>{p.role}</td>
-        <td>{p.team}</td>
-        <td>{p.fantamedia}</td>
-      </tr>
-    ))}
-  </tbody>
+  {players.map((p, i) => (
+    <tr
+      key={i}
+      className={`role-${p.role}`}
+      style={{ color: playersOut.includes(p.name) ? "red" : "inherit" }}
+    >
+      <td>{p.costo}</td>
+      <td>{p.name}</td>
+      <td>{p.role}</td>
+      <td>{p.team}</td>
+      <td>{p.fantamedia}</td>
+    </tr>
+  ))}
+</tbody>
 </table>
             <button onClick={() => setEditing(true)}>Modifica rosa</button>
           </>

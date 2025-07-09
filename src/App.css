@@ -95,3 +95,19 @@ button:hover {
   background-color: rgba(59, 130, 246, 0.15); /* azzurro trasparente */
   transition: background-color 0.2s ease;
 }
+
+.role-P {
+  background-color: rgba(147, 197, 253, 0.2); /* blu chiaro */
+}
+
+.role-D {
+  background-color: rgba(134, 239, 172, 0.2); /* verde chiaro */
+}
+
+.role-C {
+  background-color: rgba(253, 224, 71, 0.2); /* giallo */
+}
+
+.role-A {
+  background-color: rgba(251, 113, 133, 0.2); /* rosso chiaro */
+}
