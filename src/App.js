@@ -1,10 +1,10 @@
-
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
 import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import Papa from "papaparse";
 import rosaImportata from "./data/mia-rosa.json";
 import { FaSun, FaMoon } from "react-icons/fa";
+import './App.css';
 
 function App() {
   const [players, setPlayers] = useState([]);
@@ -29,9 +29,7 @@ function App() {
     console.log("🚀 Importazione avviata! Dati in arrivo:", rosaImportata);
     try {
       await Promise.all(
-        rosaImportata.map((p) =>
-          setDoc(doc(db, "rosa", p.name), p)
-        )
+        rosaImportata.map((p) => setDoc(doc(db, "rosa", p.name), p))
       );
       alert("✅ Importazione completata!");
     } catch (err) {
@@ -44,7 +42,6 @@ function App() {
       try {
         const querySnapshot = await getDocs(collection(db, "rosa"));
         const playersData = querySnapshot.docs.map((doc) => doc.data());
-        console.log("👥 Giocatori caricati da Firebase:", playersData);
         setPlayers(playersData);
         setEditedPlayers(playersData);
       } catch (error) {
@@ -57,9 +54,7 @@ function App() {
   const savePlayersToFirebase = async () => {
     try {
       await Promise.all(
-        editedPlayers.map((p) =>
-          setDoc(doc(db, "rosa", p.name), p)
-        )
+        editedPlayers.map((p) => setDoc(doc(db, "rosa", p.name), p))
       );
       setPlayers(editedPlayers);
       setEditing(false);
@@ -83,8 +78,12 @@ function App() {
     const selected = [];
     const outNames = playersOut.map((p) => p.toLowerCase());
     ["P", "D", "C", "A"].forEach((role) => {
-      const filtered = players.filter((p) => p.role === role && !outNames.includes(p.name.toLowerCase()));
-      filtered.sort((a, b) => parseFloat(b.fantamedia || 0) - parseFloat(a.fantamedia || 0));
+      const filtered = players.filter(
+        (p) => p.role === role && !outNames.includes(p.name.toLowerCase())
+      );
+      filtered.sort(
+        (a, b) => parseFloat(b.fantamedia || 0) - parseFloat(a.fantamedia || 0)
+      );
       selected.push(...filtered.slice(0, schema[role]));
     });
     const newFormation = { modulo: selectedModulo, titolari: selected };
@@ -101,16 +100,24 @@ function App() {
       try {
         const response = await fetch("http://localhost:4000/api/news");
         const data = await response.json();
-        const sortedNews = [...data].sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        const sortedNews = [...data].sort(
+          (a, b) => new Date(b.pubDate) - new Date(a.pubDate)
+        );
         setNews(sortedNews);
         setLoadingNews(false);
         const keywords = ["infortun", "stop", "out", "squalific"];
-        const infortunati = sortedNews.filter((item) => keywords.some((k) => item.title.toLowerCase().includes(k)));
+        const infortunati = sortedNews.filter((item) =>
+          keywords.some((k) => item.title.toLowerCase().includes(k))
+        );
         setInjuryHighlights(infortunati);
         const outNames = [];
         players.forEach((p) => {
           const nameLower = p.name.toLowerCase();
-          if (infortunati.some((item) => item.title.toLowerCase().includes(nameLower))) {
+          if (
+            infortunati.some((item) =>
+              item.title.toLowerCase().includes(nameLower)
+            )
+          ) {
             outNames.push(p.name);
           }
         });
@@ -135,8 +142,9 @@ function App() {
           }
         );
         const data = await response.json();
-        const matches = data.response.map(f =>
-          `${new Date(f.fixture.date).toLocaleDateString("it-IT")} – ${f.teams.home.name} vs ${f.teams.away.name}`
+        const matches = data.response.map(
+          (f) =>
+            `${new Date(f.fixture.date).toLocaleDateString("it-IT")} – ${f.teams.home.name} vs ${f.teams.away.name}`
         );
         setUpcomingMatches(matches);
       } catch (err) {
@@ -146,84 +154,140 @@ function App() {
     fetchFixtures();
   }, []);
 
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
-
-  const exportCSV = () => {
-    const csv = Papa.unparse(editedPlayers);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "mia-rosa-export.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
   };
 
-  const styles = {
-    container: {
-      fontFamily: "Arial, sans-serif",
-      padding: "1rem",
-      maxWidth: "900px",
-      margin: "0 auto",
-      backgroundColor: theme === "light" ? "#f8fafc" : "#0f172a",
-      color: theme === "light" ? "#0f172a" : "#f8fafc"
-    },
-    section: { marginBottom: "2rem" },
-    button: {
-      padding: "0.5rem 1rem",
-      margin: "0.5rem",
-      backgroundColor: theme === "light" ? "#3B82F6" : "#2563eb",
-      color: "#fff",
-      border: "none",
-      borderRadius: "0.25rem",
-      cursor: "pointer"
-    }
-  };
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) setTheme(savedTheme);
+  }, []);
 
   return (
-    <div style={styles.container}>
-      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <div className={`app ${theme}`}>
+
+      <header>
         <h1>Sacha Fantacalcio Hub</h1>
-        <button onClick={toggleTheme} style={{ fontSize: "1.5rem", background: "none", border: "none" }}>
+        <button onClick={toggleTheme}>
           {theme === "light" ? <FaMoon /> : <FaSun />}
         </button>
       </header>
 
-      <section style={styles.section}>
-        <h2>Prossime Partite</h2>
-        <ul>{upcomingMatches.map((m, i) => <li key={i}>{m}</li>)}</ul>
-      </section>
-
-      <section style={styles.section}>
-        <h2>Ultime Notizie</h2>
-        {loadingNews ? <p>Caricamento notizie...</p> : (
-          <ul>{news.slice(0, 10).map((n, i) => (
-            <li key={i}>
-              <strong>{n.title}</strong><br />
-              <span>{n.pubDate}</span>
-            </li>
-          ))}</ul>
+      <section>
+        <h2>La mia Rosa</h2>
+        <button onClick={importaRosaInFirebase}>Importa rosa da JSON</button>
+        {editing ? (
+          <>
+            <ul>
+              {editedPlayers.map((p, i) => (
+                <li key={i}>
+                  <input value={p.costo} onChange={(e) => {
+                    const copy = [...editedPlayers];
+                    copy[i].costo = e.target.value;
+                    setEditedPlayers(copy);
+                  }} />
+                  <input value={p.name} onChange={(e) => {
+                    const copy = [...editedPlayers];
+                    copy[i].name = e.target.value;
+                    setEditedPlayers(copy);
+                  }} />
+                  <input value={p.role} onChange={(e) => {
+                    const copy = [...editedPlayers];
+                    copy[i].role = e.target.value;
+                    setEditedPlayers(copy);
+                  }} />
+                  <input value={p.team} onChange={(e) => {
+                    const copy = [...editedPlayers];
+                    copy[i].team = e.target.value;
+                    setEditedPlayers(copy);
+                  }} />
+                  <input value={p.fantamedia} onChange={(e) => {
+                    const copy = [...editedPlayers];
+                    copy[i].fantamedia = e.target.value;
+                    setEditedPlayers(copy);
+                  }} />
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => setEditing(false)}>Chiudi Modifica</button>
+            <button onClick={savePlayersToFirebase}>Salva su Firebase</button>
+          </>
+        ) : (
+          <>
+            {players.map((p, i) => (
+              <p key={i}>
+                💰 {p.costo} – {p.name} – {p.role} – {p.team} – FM: {p.fantamedia}
+              </p>
+            ))}
+            <button onClick={() => setEditing(true)}>Modifica rosa</button>
+          </>
         )}
       </section>
 
-      <section style={styles.section}>
+      <section>
         <h2>Formazione AI</h2>
-        <select value={selectedModulo} onChange={e => setSelectedModulo(e.target.value)}>
-          {["3-4-3", "4-3-3", "3-5-2", "4-4-2", "4-5-1", "5-3-2"].map(m => (
-            <option key={m} value={m}>{m}</option>
+        <select
+          value={selectedModulo}
+          onChange={(e) => setSelectedModulo(e.target.value)}
+        >
+          {["3-4-3", "4-3-3", "3-5-2", "4-4-2", "4-5-1", "5-3-2"].map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
           ))}
         </select>
-        <button onClick={calculateOptimalFormation} style={styles.button}>Calcola formazione</button>
+        <button onClick={calculateOptimalFormation}>Calcola formazione</button>
         {formation && (
           <div>
-            <h3>{formation.modulo}</h3>
-            <p>🧤 {formation.titolari.filter(p => p.role === "P").map(p => p.name).join(" ")}</p>
-            <p>🛡️ {formation.titolari.filter(p => p.role === "D").map(p => p.name).join(" – ")}</p>
-            <p>🎯 {formation.titolari.filter(p => p.role === "C").map(p => p.name).join(" – ")}</p>
-            <p>⚽ {formation.titolari.filter(p => p.role === "A").map(p => p.name).join(" – ")}</p>
+            <h3>Modulo: {formation.modulo}</h3>
+            <p>
+              🧤 {formation.titolari.filter((p) => p.role === "P").map((p) => p.name).join(" ")}
+            </p>
+            <p>
+              🛡️ {formation.titolari.filter((p) => p.role === "D").map((p) => p.name).join(" – ")}
+            </p>
+            <p>
+              🎯 {formation.titolari.filter((p) => p.role === "C").map((p) => p.name).join(" – ")}
+            </p>
+            <p>
+              ⚽ {formation.titolari.filter((p) => p.role === "A").map((p) => p.name).join(" – ")}
+            </p>
           </div>
         )}
+      </section>
+
+      <section>
+        <h2>Ultime Notizie</h2>
+        {loadingNews ? (
+          <p>Caricamento notizie...</p>
+        ) : (
+          <ul>
+            {(showAllNews ? news : news.slice(0, 10)).map((article, index) => (
+              <li key={index}>
+                <a href={article.guid} target="_blank" rel="noopener noreferrer">
+                  {article.title}
+                </a>
+                <p>{article.pubDate}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+        {news.length > 10 && (
+          <button onClick={() => setShowAllNews(!showAllNews)}>
+            {showAllNews ? "Nascondi notizie" : "Vedi altre notizie"}
+          </button>
+        )}
+      </section>
+
+      <section>
+        <h2>Prossime Partite</h2>
+        <ul>
+          {upcomingMatches.map((m, i) => (
+            <li key={i}>{m}</li>
+          ))}
+        </ul>
       </section>
     </div>
   );
