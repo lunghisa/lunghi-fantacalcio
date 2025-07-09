@@ -280,28 +280,33 @@ function App() {
         )}
       </section>
 
-      <section style={styles.section}>
-        <h2>Ultime Notizie</h2>
-        {loadingNews ? (
-          <p>Caricamento notizie...</p>
-        ) : (
-          <ul>
-            {(showAllNews ? news : news.slice(0, 10)).map((article, index) => (
-              <li key={index} style={{ marginBottom: "1rem" }}>
-                <a href={article.link} target="_blank" rel="noopener noreferrer" style={{ fontWeight: "bold", color: "#1D4ED8" }}>
-                  {article.title}
-                </a>
-                <p>{article.pubDate}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-        {news.length > 10 && (
-          <button onClick={() => setShowAllNews(!showAllNews)} style={styles.button}>
-            {showAllNews ? "Nascondi notizie" : "Vedi altre notizie"}
-          </button>
-        )}
-      </section>
+<section style={styles.section}>
+  <h2>Ultime Notizie</h2>
+  {loadingNews ? (
+    <p>Caricamento notizie...</p>
+  ) : (
+    <ul>
+      {(showAllNews ? news : news.slice(0, 10)).map((article, index) => (
+        <li key={index} style={{ marginBottom: "1rem" }}>
+          <a
+            href={article.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontWeight: "bold", color: "#1D4ED8", textDecoration: "none" }}
+          >
+            {article.title}
+          </a>
+          <p>{article.pubDate}</p>
+        </li>
+      ))}
+    </ul>
+  )}
+  {news.length > 10 && (
+    <button onClick={() => setShowAllNews(!showAllNews)} style={styles.button}>
+      {showAllNews ? "Nascondi notizie" : "Vedi altre notizie"}
+    </button>
+  )}
+</section>
 
       <footer style={{ textAlign: "center", marginTop: "2rem", color: theme === "light" ? "#888" : "#ccc" }}>
         <p>© 2025 lunghi.ch - Tutti i diritti riservati.</p>
