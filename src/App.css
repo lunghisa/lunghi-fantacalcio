@@ -1,125 +1,115 @@
-/* Contenitore principale con sfondo a pattern */
-.app {
-  position: relative;
-  min-height: 100vh;
-  padding: 1rem;
-  font-family: 'Arial', sans-serif;
-  overflow: hidden;
-}
-
-/* Overlay con immagine piccola e ripetuta */
-.app::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('./assets/images/sfondo-unico.jpg'); /* usa il tuo file */
-  background-size: 150px auto; /* 🔁 dimensione dell'immagine ripetuta */
-  background-repeat: repeat;   /* 🔁 ripetizione in orizzontale e verticale */
-  background-position: top left;
-  opacity: 0.15;               /* 🎛️ trasparenza */
-  z-index: -1;                 /* dietro al contenuto */
-}
-
-/* Temi */
+/* Tema base */
 .app.light {
-  color: #000;
+  --bg-color: #fefefe;
+  --text-color: #111;
+  --table-bg: #ffffffcc;
 }
 
 .app.dark {
-  color: #fff;
+  --bg-color: #121212;
+  --text-color: #f1f1f1;
+  --table-bg: #1e1e1ecc;
 }
 
-/* Layout base */
+/* Stile principale */
+.app {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Segoe UI", sans-serif;
+  padding: 1rem;
+  background-image: url("/background.png");
+  background-repeat: repeat;
+  background-size: 300px auto;
+  background-attachment: fixed;
+  background-blend-mode: overlay;
+  min-height: 100vh;
+}
+
+/* Header */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-section {
-  margin-top: 2rem;
+header h1 {
+  font-size: 1.8rem;
 }
 
-input {
-  margin: 0.25rem;
-  padding: 0.25rem;
-}
-
-button {
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0.25rem;
+header button {
+  background: none;
   border: none;
-  border-radius: 4px;
-  background-color: #2563eb;
-  color: white;
+  font-size: 1.4rem;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #1d4ed8;
+/* Sezioni */
+section {
+  margin-bottom: 2rem;
 }
 
-/* Responsive base */
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  input {
-    width: 100%;
-  }
+section h2 {
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid currentColor;
 }
-.rosa-table {
+
+/* Tabelle */
+table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.rosa-table th,
-.rosa-table td {
-  padding: 0.6rem 1rem;
-  border: 1px solid #ccc;
-  text-align: left;
-}
-
-.rosa-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  font-size: 0.95rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(3px);
-  border: 1px solid #ccc;
+  background-color: var(--table-bg);
   border-radius: 8px;
   overflow: hidden;
+  margin-top: 1rem;
 }
 
-.rosa-table th, .rosa-table td {
-  padding: 0.6rem;
+th, td {
+  padding: 0.6rem 1rem;
   text-align: left;
-  border-bottom: 1px solid #ccc;
+  font-size: 0.95rem;
 }
 
-.rosa-table tr:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+th {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.role-P {
-  background-color: #dbeafe;
+tr:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  transition: background 0.3s;
 }
 
-.role-D {
-  background-color: #dcfce7;
+/* Colori ruoli */
+td.role-P {
+  color: orange;
+  font-weight: bold;
+}
+td.role-D {
+  color: green;
+}
+td.role-C {
+  color: dodgerblue;
+}
+td.role-A {
+  color: crimson;
 }
 
-.role-C {
-  background-color: #fef9c3;
-}
-
-.role-A {
-  background-color: #fee2e2;
+/* Responsive */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  thead {
+    display: none;
+  }
+  td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
 }
