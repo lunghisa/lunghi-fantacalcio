@@ -226,20 +226,28 @@ function App() {
       <th>FM</th>
     </tr>
   </thead>
-  <tbody>
-  {players.map((p, i) => (
-    <tr
-      key={i}
-      className={`role-${p.role}`}
-      style={{ color: playersOut.includes(p.name) ? "red" : "inherit" }}
-    >
-      <td>{p.costo}</td>
-      <td>{p.name}</td>
-      <td>{p.role}</td>
-      <td>{p.team}</td>
-      <td>{p.fantamedia}</td>
-    </tr>
-  ))}
+ <tbody>
+  {[...players]
+    .sort((a, b) => {
+      const roleOrder = { P: 1, D: 2, C: 3, A: 4 };
+      if (a.role !== b.role) {
+        return roleOrder[a.role] - roleOrder[b.role];
+      }
+      return a.name.localeCompare(b.name);
+    })
+    .map((p, i) => (
+      <tr
+        key={i}
+        className={`role-${p.role}`}
+        style={{ color: playersOut.includes(p.name) ? "red" : "inherit" }}
+      >
+        <td>{p.costo}</td>
+        <td>{p.name}</td>
+        <td>{p.role}</td>
+        <td>{p.team}</td>
+        <td>{p.fantamedia}</td>
+      </tr>
+    ))}
 </tbody>
 </table>
             <button onClick={() => setEditing(true)}>Modifica rosa</button>
