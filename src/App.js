@@ -3,7 +3,8 @@ import { db } from "./firebase";
 import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import Papa from "papaparse";
 import rosaImportata from "./data/mia-rosa.json";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon, FaFutbol, FaHeartbeat, FaListUl, FaUsers } from "react-icons/fa";
+import "./App.css";
 
 function App() {
   const [players, setPlayers] = useState([]);
@@ -25,15 +26,14 @@ function App() {
   const [upcomingMatches, setUpcomingMatches] = useState([]);
 
   const importaRosaInFirebase = async () => {
+    console.log("🚀 Importazione avviata! Dati in arrivo:", rosaImportata);
     try {
       await Promise.all(
-        rosaImportata.map((p) =>
-          setDoc(doc(db, "rosa", p.name), p)
-        )
+        rosaImportata.map((p) => setDoc(doc(db, "rosa", p.name), p))
       );
-      alert("Importazione completata!");
+      alert("✅ Importazione completata!");
     } catch (err) {
-      console.error("Errore importazione rosa:", err);
+      console.error("❌ Errore durante l'importazione della rosa:", err);
     }
   };
 
@@ -42,6 +42,7 @@ function App() {
       try {
         const querySnapshot = await getDocs(collection(db, "rosa"));
         const playersData = querySnapshot.docs.map((doc) => doc.data());
+        console.log("👥 Giocatori caricati da Firebase:", playersData);
         setPlayers(playersData);
         setEditedPlayers(playersData);
       } catch (error) {
@@ -54,9 +55,7 @@ function App() {
   const savePlayersToFirebase = async () => {
     try {
       await Promise.all(
-        editedPlayers.map((p) =>
-          setDoc(doc(db, "rosa", p.name), p)
-        )
+        editedPlayers.map((p) => setDoc(doc(db, "rosa", p.name), p))
       );
       setPlayers(editedPlayers);
       setEditing(false);
@@ -80,10 +79,14 @@ function App() {
     const selected = [];
     const outNames = playersOut.map((p) => p.toLowerCase());
     ["P", "D", "C", "A"].forEach((role) => {
-      const filtered = players.filter((p) => p.role === role && !outNames.includes(p.name.toLowerCase()));
-      filtered.sort((a, b) => parseFloat(b.fantamedia || 0) - parseFloat(a.fantamedia || 0));
+      const filtered = players.filter(
+        (p) => p.role === role && !outNames.includes(p.name.toLowerCase())
+      );
+      filtered.sort(
+        (a, b) => parseFloat(b.fantamedia || 0) - parseFloat(a.fantamedia || 0)
+      );
       selected.push(...filtered.slice(0, schema[role]));
-    })
+    });
     const newFormation = { modulo: selectedModulo, titolari: selected };
     setFormation(newFormation);
     localStorage.setItem("formation", JSON.stringify(newFormation));
@@ -98,16 +101,24 @@ function App() {
       try {
         const response = await fetch("http://localhost:4000/api/news");
         const data = await response.json();
-        const sortedNews = [...data].sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        const sortedNews = [...data].sort(
+          (a, b) => new Date(b.pubDate) - new Date(a.pubDate)
+        );
         setNews(sortedNews);
         setLoadingNews(false);
         const keywords = ["infortun", "stop", "out", "squalific"];
-        const infortunati = sortedNews.filter((item) => keywords.some((k) => item.title.toLowerCase().includes(k)));
+        const infortunati = sortedNews.filter((item) =>
+          keywords.some((k) => item.title.toLowerCase().includes(k))
+        );
         setInjuryHighlights(infortunati);
         const outNames = [];
         players.forEach((p) => {
           const nameLower = p.name.toLowerCase();
-          if (infortunati.some((item) => item.title.toLowerCase().includes(nameLower))) {
+          if (
+            infortunati.some((item) =>
+              item.title.toLowerCase().includes(nameLower)
+            )
+          ) {
             outNames.push(p.name);
           }
         });
@@ -123,97 +134,47 @@ function App() {
   useEffect(() => {
     const fetchFixtures = async () => {
       try {
-        const response = await fetch("https://v3.football.api-sports.io/fixtures?league=135&season=2025&next=10", {
-          headers: {
-            "x-apisports-key": "86d2e487d6ef49e5e3619d086e1448a6"
+        const response = await fetch(
+          "https://v3.football.api-sports.io/fixtures?league=135&season=2025&next=10",
+          {
+            headers: {
+              "x-apisports-key": "86d2e487d6ef49e5e3619d086e1448a6"
+            }
           }
-        });
+        );
         const data = await response.json();
-        const matches = data.response.map(f => `${f.teams.home.name} - ${f.teams.away.name}`);
+        const matches = data.response.map(
+          (f) =>
+            `${new Date(f.fixture.date).toLocaleDateString("it-IT")} – ${f.teams.home.name} vs ${f.teams.away.name}`
+        );
         setUpcomingMatches(matches);
       } catch (err) {
-        console.error("Errore caricamento calendario da API-Football:", err);
+        console.error("❌ Errore caricamento 2025:", err);
       }
     };
     fetchFixtures();
   }, []);
 
-  // resto del codice invariato...
-
-  return (
-    <div>
-      {/* ... */}
-    </div>
-  );
-}
-
-export default App;
-
-
   const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
-  const exportCSV = () => {
-    const csv = Papa.unparse(editedPlayers);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "mia-rosa-export.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const styles = {
-    container: {
-      fontFamily: "Arial, sans-serif",
-      padding: "1rem",
-      maxWidth: "800px",
-      margin: "0 auto",
-      backgroundColor: theme === "light" ? "#dbeafe" : "#1e293b",
-      color: theme === "light" ? "#000" : "#fff"
-    },
-    section: { marginBottom: "2rem" },
-    button: {
-      padding: "0.5rem 1rem",
-      margin: "0.5rem",
-      backgroundColor: theme === "light" ? "#3B82F6" : "#2563eb",
-      color: "#fff",
-      border: "none",
-      borderRadius: "0.25rem",
-      cursor: "pointer"
-    }
-  };
-
   return (
-    <div style={styles.container}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <img src="./logo.jpg" alt="Logo" style={{ width: "250px" }} />
-<button onClick={toggleTheme} style={{
-  background: "none",
-  border: "none",
-  fontSize: "1.5rem",
-  cursor: "pointer",
-  color: theme === "light" ? "#000" : "#fff",
-  borderRadius: "50%",
-  padding: "0.5rem"
-}}>
-  {theme === "light" ? <FaMoon /> : <FaSun />}
-</button>      
+    <div className={`app ${theme}`}>
+      <header className="header">
+        <h1><FaFutbol /> Sacha Fantacalcio Hub</h1>
+        <button onClick={toggleTheme} className="theme-toggle">
+          {theme === "light" ? <FaMoon /> : <FaSun />}
+        </button>
+      </header>
 
-</div>
-
-      <h1>Sacha Fantacalcio Hub</h1>
-
-      <section style={styles.section}>
-        <h2>Prossime Partite</h2>
+      <section className="section">
+        <h2><FaListUl /> Prossime Partite</h2>
         <ul>
           {upcomingMatches.map((m, i) => <li key={i}>{m}</li>)}
         </ul>
       </section>
 
-      <section style={styles.section}>
-        <h2>Infortuni</h2>
+      <section className="section">
+        <h2><FaHeartbeat /> Infortuni</h2>
         <ul>
           {injuryHighlights.map((item, idx) => (
             <li key={idx}><strong>{item.title}</strong></li>
@@ -221,72 +182,32 @@ export default App;
         </ul>
       </section>
 
-      <section style={styles.section}>
-        <h2>La mia Rosa</h2>
-        <button onClick={importaRosaInFirebase} style={styles.button}>Importa rosa da JSON</button>
-        {editing ? (
-          <>
-            <ul>
-              {editedPlayers.map((p, i) => (
-                <li key={i}>
-                  <input value={p.name} onChange={e => {
-                    const copy = [...editedPlayers];
-                    copy[i].name = e.target.value;
-                    setEditedPlayers(copy);
-                  }} />
-                  <input value={p.role} onChange={e => {
-                    const copy = [...editedPlayers];
-                    copy[i].role = e.target.value;
-                    setEditedPlayers(copy);
-                  }} />
-                  <input value={p.team} onChange={e => {
-                    const copy = [...editedPlayers];
-                    copy[i].team = e.target.value;
-                    setEditedPlayers(copy);
-                  }} />
-                  <input value={p.fantamedia} onChange={e => {
-                    const copy = [...editedPlayers];
-                    copy[i].fantamedia = e.target.value;
-                    setEditedPlayers(copy);
-                  }} />
-                </li>
-              ))}
-            </ul>
-            <button onClick={() => setEditing(false)} style={styles.button}>Chiudi Modifica</button>
-            <button onClick={exportCSV} style={styles.button}>Esporta CSV</button>
-            <button onClick={savePlayersToFirebase} style={styles.button}>Salva su Firebase</button>
-          </>
-        ) : (
-          <>
-            {["P", "D", "C", "A"].map(role => (
-              <div key={role}>
-                <h3>{role === "P" ? "Portieri" : role === "D" ? "Difensori" : role === "C" ? "Centrocampisti" : "Attaccanti"}</h3>
-                <ul>
-                  {players.filter(p => p.role === role).map((p, i) => (
-                    <li key={i} style={{ color: playersOut.includes(p.name) ? "red" : "inherit" }}>
-                      {p.name} - {p.team} - FM: {p.fantamedia}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      <section className="section">
+        <h2><FaUsers /> Ultime Notizie</h2>
+        {loadingNews ? <p>Caricamento notizie...</p> : (
+          <ul>
+            {(showAllNews ? news : news.slice(0, 10)).map((article, index) => (
+              <li key={index}>
+                <a href={article.guid} target="_blank" rel="noopener noreferrer">
+                  {article.title}
+                </a>
+                <p>{article.pubDate}</p>
+              </li>
             ))}
-            <button onClick={() => setEditing(true)} style={styles.button}>Modifica rosa</button>
-          </>
+          </ul>
         )}
       </section>
 
-      <section style={styles.section}>
+      <section className="section">
         <h2>Formazione AI</h2>
         <select value={selectedModulo} onChange={e => setSelectedModulo(e.target.value)}>
-          {Object.keys({
-            "3-4-3": {}, "4-3-3": {}, "3-5-2": {}, "4-4-2": {}, "4-5-1": {}, "5-3-2": {}
-          }).map(m => (
+          {["3-4-3", "4-3-3", "3-5-2", "4-4-2", "4-5-1", "5-3-2"].map(m => (
             <option key={m} value={m}>{m}</option>
           ))}
         </select>
-        <button onClick={calculateOptimalFormation} style={styles.button}>Calcola formazione</button>
+        <button onClick={calculateOptimalFormation}>Calcola formazione</button>
         {formation && (
-          <div style={{ marginTop: "1rem" }}>
+          <div className="formation">
             <h3>Modulo: {formation.modulo}</h3>
             <p>🧤 {formation.titolari.filter(p => p.role === "P").map(p => p.name).join(" ")}</p>
             <p>🛡️ {formation.titolari.filter(p => p.role === "D").map(p => p.name).join(" – ")}</p>
@@ -296,35 +217,7 @@ export default App;
         )}
       </section>
 
-<section style={styles.section}>
-  <h2>Ultime Notizie</h2>
-  {loadingNews ? (
-    <p>Caricamento notizie...</p>
-  ) : (
-    <ul>
-      {(showAllNews ? news : news.slice(0, 10)).map((article, index) => (
-        <li key={index} style={{ marginBottom: "1rem" }}>
-          <a
-            href={article.guid}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontWeight: "bold", color: "#1D4ED8", textDecoration: "none" }}
-          >
-            {article.title}
-          </a>
-          <p>{article.pubDate}</p>
-        </li>
-      ))}
-    </ul>
-  )}
-  {news.length > 10 && (
-    <button onClick={() => setShowAllNews(!showAllNews)} style={styles.button}>
-      {showAllNews ? "Nascondi notizie" : "Vedi altre notizie"}
-    </button>
-  )}
-</section>
-
-      <footer style={{ textAlign: "center", marginTop: "2rem", color: theme === "light" ? "#888" : "#ccc" }}>
+      <footer className="footer">
         <p>© 2025 lunghi.ch - Tutti i diritti riservati.</p>
       </footer>
     </div>

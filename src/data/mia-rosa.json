@@ -1,170 +1,128 @@
 [
   {
-    "name": "Provedel",
     "role": "P",
-    "price": 27,
-    "team": "lazio",
-    "fantamedia": 4.53
-  },
-  {
     "name": "Falcone",
+    "team": "Lec",
+    "costo": "1",
+    "fantamedia": 0
+  },
+  {
     "role": "P",
-    "price": 1,
-    "team": "lecce",
-    "fantamedia": 4.79
+    "name": "Fruchtl",
+    "team": "Lec",
+    "costo": "0",
+    "fantamedia": 0
   },
   {
-    "name": "Bellanova",
+    "role": "P",
+    "name": "Provedel",
+    "team": "Laz",
+    "costo": "27",
+    "fantamedia": 0
+  },
+  {
+    "role": "P",
+    "name": "Furlanetto",
+    "team": "Laz",
+    "costo": "0",
+    "fantamedia": 0
+  },
+  {
+    "role": "P",
+    "name": "Mandas",
+    "team": "Laz",
+    "costo": "0",
+    "fantamedia": 0
+  },
+  {
+    "role": "P",
+    "name": "Samooja",
+    "team": "Lec",
+    "costo": "0",
+    "fantamedia": 0
+  },
+  {
     "role": "D",
-    "price": 24,
-    "team": "atalanta",
-    "fantamedia": 6.26
+    "name": "De Vrij",
+    "team": "Int",
+    "costo": "3",
+    "fantamedia": 0
   },
   {
-    "name": "DeVrij",
     "role": "D",
-    "price": 3,
-    "team": "inter",
-    "fantamedia": 6.55
-  },
-  {
-    "name": "Hummels",
-    "role": "D",
-    "price": 1,
-    "team": "roma",
-    "fantamedia": 5.92
-  },
-  {
-    "name": "Lykogiannis",
-    "role": "D",
-    "price": 5,
-    "team": "bologna",
-    "fantamedia": 6.16
-  },
-  {
-    "name": "Martin",
-    "role": "D",
-    "price": 3,
-    "team": "genoa",
-    "fantamedia": 6.32
-  },
-  {
-    "name": "Pavard",
-    "role": "D",
-    "price": 13,
-    "team": "inter",
-    "fantamedia": 6
-  },
-  {
-    "name": "Pezzella Giu",
-    "role": "D",
-    "price": 6,
-    "team": "empoli",
-    "fantamedia": 6.04
-  },
-  {
     "name": "Romagnoli",
+    "team": "Laz",
+    "costo": "8",
+    "fantamedia": 0
+  },
+  {
     "role": "D",
-    "price": 8,
-    "team": "lazio",
-    "fantamedia": 5.91
+    "name": "Pezzella Giu.",
+    "team": "Emp",
+    "costo": "6",
+    "fantamedia": 0
   },
   {
-    "name": "Barella",
+    "role": "D",
+    "name": "Hummels",
+    "team": "Rom",
+    "costo": "1",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Martin",
+    "team": "Gen",
+    "costo": "3",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Lykogiannis",
+    "team": "Bol",
+    "costo": "5",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Pavard",
+    "team": "Int",
+    "costo": "15",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Bellanova",
+    "team": "Ata",
+    "costo": "24",
+    "fantamedia": 0
+  },
+  {
     "role": "C",
-    "price": 35,
-    "team": "inter",
-    "fantamedia": 6.65
-  },
-  {
-    "name": "Brescianini",
-    "role": "C",
-    "price": 5,
-    "team": "atalanta",
-    "fantamedia": 6.72
-  },
-  {
-    "name": "Elmas",
-    "role": "C",
-    "price": 7,
-    "team": "torino",
-    "fantamedia": 7.04
-  },
-  {
-    "name": "Fadera",
-    "role": "C",
-    "price": 20,
-    "team": "como",
-    "fantamedia": 6.19
-  },
-  {
     "name": "Lazovic",
-    "role": "C",
-    "price": 5,
-    "team": "verona",
-    "fantamedia": 6.31
+    "team": "Ver",
+    "costo": "5",
+    "fantamedia": 0
   },
   {
-    "name": "Miretti",
     "role": "C",
-    "price": 30,
-    "team": "genoa",
-    "fantamedia": 6.42
+    "name": "Barella",
+    "team": "Int",
+    "costo": "40",
+    "fantamedia": 0
   },
   {
+    "role": "C",
     "name": "Nicolussi Caviglia",
+    "team": "Ven",
+    "costo": "50",
+    "fantamedia": 0
+  },
+  {
     "role": "C",
-    "price": 50,
-    "team": "venezia",
-    "fantamedia": 6.53
-  },
-  {
-    "name": "Reijnders",
-    "role": "C",
-    "price": 15,
-    "team": "milan",
-    "fantamedia": 7.18
-  },
-  {
-    "name": "Cutrone",
-    "role": "A",
-    "price": 15,
-    "team": "como",
-    "fantamedia": 6.67
-  },
-  {
-    "name": "Douvikas",
-    "role": "A",
-    "price": 90,
-    "team": "como",
-    "fantamedia": 6.75
-  },
-  {
-    "name": "Leao",
-    "role": "A",
-    "price": 91,
-    "team": "milan",
-    "fantamedia": 7.06
-  },
-  {
-    "name": "Mosquera",
-    "role": "A",
-    "price": 11,
-    "team": "verona",
-    "fantamedia": 6.3
-  },
-  {
-    "name": "Okafor",
-    "role": "A",
-    "price": 25,
-    "team": "napoli",
-    "fantamedia": 6.12
-  },
-  {
-    "name": "Thuram",
-    "role": "A",
-    "price": 180,
-    "team": "inter",
-    "fantamedia": 7.75
+    "name": "Elmas",
+    "team": "Tor",
+    "costo": "7",
+    "fantamedia": 0
   }
 ]
