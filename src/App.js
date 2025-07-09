@@ -123,16 +123,32 @@ function App() {
   useEffect(() => {
     const fetchFixtures = async () => {
       try {
-        const response = await fetch("https://www.sosfanta.com/feed/");
-        const text = await response.text();
-        const matches = text.match(/\b[A-Z][a-z]+\s-\s[A-Z][a-z]+\b/g);
-        if (matches) setUpcomingMatches([...new Set(matches.slice(0, 5))]);
+        const response = await fetch("https://v3.football.api-sports.io/fixtures?league=135&season=2025&next=10", {
+          headers: {
+            "x-apisports-key": "86d2e487d6ef49e5e3619d086e1448a6"
+          }
+        });
+        const data = await response.json();
+        const matches = data.response.map(f => `${f.teams.home.name} - ${f.teams.away.name}`);
+        setUpcomingMatches(matches);
       } catch (err) {
-        console.error("Errore caricamento calendario:", err);
+        console.error("Errore caricamento calendario da API-Football:", err);
       }
     };
     fetchFixtures();
   }, []);
+
+  // resto del codice invariato...
+
+  return (
+    <div>
+      {/* ... */}
+    </div>
+  );
+}
+
+export default App;
+
 
   const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
