@@ -73,3 +73,25 @@ button:hover {
     width: 100%;
   }
 }
+.rosa-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.rosa-table th,
+.rosa-table td {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.rosa-table th {
+  background-color: rgba(30, 41, 59, 0.1); /* grigio chiaro con trasparenza */
+  color: inherit;
+}
+
+.rosa-table tr:hover {
+  background-color: rgba(59, 130, 246, 0.15); /* azzurro trasparente */
+  transition: background-color 0.2s ease;
+}

@@ -220,15 +220,15 @@ function App() {
   <thead>
     <tr>
       <th>💰 Costo</th>
-      <th>👤 Nome</th>
-      <th>🎯 Ruolo</th>
-      <th>🏟 Squadra</th>
-      <th>📊 FM</th>
+      <th>Nome</th>
+      <th>Ruolo</th>
+      <th>Squadra</th>
+      <th>FM</th>
     </tr>
   </thead>
   <tbody>
     {players.map((p, i) => (
-      <tr key={i} className={playersOut.includes(p.name) ? "out" : ""}>
+      <tr key={i} style={{ color: playersOut.includes(p.name) ? "red" : "inherit" }}>
         <td>{p.costo}</td>
         <td>{p.name}</td>
         <td>{p.role}</td>
