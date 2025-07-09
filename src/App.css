@@ -86,28 +86,40 @@ button:hover {
   text-align: left;
 }
 
-.rosa-table th {
-  background-color: rgba(30, 41, 59, 0.1); /* grigio chiaro con trasparenza */
-  color: inherit;
+.rosa-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(3px);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rosa-table th, .rosa-table td {
+  padding: 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
 }
 
 .rosa-table tr:hover {
-  background-color: rgba(59, 130, 246, 0.15); /* azzurro trasparente */
-  transition: background-color 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .role-P {
-  background-color: rgba(147, 197, 253, 0.2); /* blu chiaro */
+  background-color: #dbeafe;
 }
 
 .role-D {
-  background-color: rgba(134, 239, 172, 0.2); /* verde chiaro */
+  background-color: #dcfce7;
 }
 
 .role-C {
-  background-color: rgba(253, 224, 71, 0.2); /* giallo */
+  background-color: #fef9c3;
 }
 
 .role-A {
-  background-color: rgba(251, 113, 133, 0.2); /* rosso chiaro */
+  background-color: #fee2e2;
 }

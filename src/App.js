@@ -269,22 +269,38 @@ function App() {
         </select>
         <button onClick={calculateOptimalFormation}>Calcola formazione</button>
         {formation && (
-          <div>
-            <h3>Modulo: {formation.modulo}</h3>
-            <p>
-              🧤 {formation.titolari.filter((p) => p.role === "P").map((p) => p.name).join(" ")}
-            </p>
-            <p>
-              🛡️ {formation.titolari.filter((p) => p.role === "D").map((p) => p.name).join(" – ")}
-            </p>
-            <p>
-              🎯 {formation.titolari.filter((p) => p.role === "C").map((p) => p.name).join(" – ")}
-            </p>
-            <p>
-              ⚽ {formation.titolari.filter((p) => p.role === "A").map((p) => p.name).join(" – ")}
-            </p>
-          </div>
-        )}
+  <div style={{ marginTop: "1rem" }}>
+    <h3>Modulo: {formation.modulo}</h3>
+    <table className="rosa-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Ruolo</th>
+          <th>Squadra</th>
+          <th>FM</th>
+        </tr>
+      </thead>
+      <tbody>
+        {[...formation.titolari]
+          .sort((a, b) => {
+            const roleOrder = { P: 1, D: 2, C: 3, A: 4 };
+            if (a.role !== b.role) {
+              return roleOrder[a.role] - roleOrder[b.role];
+            }
+            return a.name.localeCompare(b.name);
+          })
+          .map((p, i) => (
+            <tr key={i} className={`role-${p.role}`}>
+              <td>{p.name}</td>
+              <td>{p.role}</td>
+              <td>{p.team}</td>
+              <td>{p.fantamedia}</td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  </div>
+)}
       </section>
 
       <section>
