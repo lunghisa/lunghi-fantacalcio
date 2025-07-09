@@ -1,10 +1,10 @@
+
 import { useEffect, useState } from "react";
 import { db } from "./firebase";
 import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import Papa from "papaparse";
 import rosaImportata from "./data/mia-rosa.json";
-import { FaSun, FaMoon, FaFutbol, FaHeartbeat, FaListUl, FaUsers } from "react-icons/fa";
-import "./App.css";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 function App() {
   const [players, setPlayers] = useState([]);
@@ -29,7 +29,9 @@ function App() {
     console.log("🚀 Importazione avviata! Dati in arrivo:", rosaImportata);
     try {
       await Promise.all(
-        rosaImportata.map((p) => setDoc(doc(db, "rosa", p.name), p))
+        rosaImportata.map((p) =>
+          setDoc(doc(db, "rosa", p.name), p)
+        )
       );
       alert("✅ Importazione completata!");
     } catch (err) {
@@ -55,7 +57,9 @@ function App() {
   const savePlayersToFirebase = async () => {
     try {
       await Promise.all(
-        editedPlayers.map((p) => setDoc(doc(db, "rosa", p.name), p))
+        editedPlayers.map((p) =>
+          setDoc(doc(db, "rosa", p.name), p)
+        )
       );
       setPlayers(editedPlayers);
       setEditing(false);
@@ -79,12 +83,8 @@ function App() {
     const selected = [];
     const outNames = playersOut.map((p) => p.toLowerCase());
     ["P", "D", "C", "A"].forEach((role) => {
-      const filtered = players.filter(
-        (p) => p.role === role && !outNames.includes(p.name.toLowerCase())
-      );
-      filtered.sort(
-        (a, b) => parseFloat(b.fantamedia || 0) - parseFloat(a.fantamedia || 0)
-      );
+      const filtered = players.filter((p) => p.role === role && !outNames.includes(p.name.toLowerCase()));
+      filtered.sort((a, b) => parseFloat(b.fantamedia || 0) - parseFloat(a.fantamedia || 0));
       selected.push(...filtered.slice(0, schema[role]));
     });
     const newFormation = { modulo: selectedModulo, titolari: selected };
@@ -101,24 +101,16 @@ function App() {
       try {
         const response = await fetch("http://localhost:4000/api/news");
         const data = await response.json();
-        const sortedNews = [...data].sort(
-          (a, b) => new Date(b.pubDate) - new Date(a.pubDate)
-        );
+        const sortedNews = [...data].sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
         setNews(sortedNews);
         setLoadingNews(false);
         const keywords = ["infortun", "stop", "out", "squalific"];
-        const infortunati = sortedNews.filter((item) =>
-          keywords.some((k) => item.title.toLowerCase().includes(k))
-        );
+        const infortunati = sortedNews.filter((item) => keywords.some((k) => item.title.toLowerCase().includes(k)));
         setInjuryHighlights(infortunati);
         const outNames = [];
         players.forEach((p) => {
           const nameLower = p.name.toLowerCase();
-          if (
-            infortunati.some((item) =>
-              item.title.toLowerCase().includes(nameLower)
-            )
-          ) {
+          if (infortunati.some((item) => item.title.toLowerCase().includes(nameLower))) {
             outNames.push(p.name);
           }
         });
@@ -143,9 +135,8 @@ function App() {
           }
         );
         const data = await response.json();
-        const matches = data.response.map(
-          (f) =>
-            `${new Date(f.fixture.date).toLocaleDateString("it-IT")} – ${f.teams.home.name} vs ${f.teams.away.name}`
+        const matches = data.response.map(f =>
+          `${new Date(f.fixture.date).toLocaleDateString("it-IT")} – ${f.teams.home.name} vs ${f.teams.away.name}`
         );
         setUpcomingMatches(matches);
       } catch (err) {
@@ -157,58 +148,76 @@ function App() {
 
   const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
+  const exportCSV = () => {
+    const csv = Papa.unparse(editedPlayers);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "mia-rosa-export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const styles = {
+    container: {
+      fontFamily: "Arial, sans-serif",
+      padding: "1rem",
+      maxWidth: "900px",
+      margin: "0 auto",
+      backgroundColor: theme === "light" ? "#f8fafc" : "#0f172a",
+      color: theme === "light" ? "#0f172a" : "#f8fafc"
+    },
+    section: { marginBottom: "2rem" },
+    button: {
+      padding: "0.5rem 1rem",
+      margin: "0.5rem",
+      backgroundColor: theme === "light" ? "#3B82F6" : "#2563eb",
+      color: "#fff",
+      border: "none",
+      borderRadius: "0.25rem",
+      cursor: "pointer"
+    }
+  };
+
   return (
-    <div className={`app ${theme}`}>
-      <header className="header">
-        <h1><FaFutbol /> Sacha Fantacalcio Hub</h1>
-        <button onClick={toggleTheme} className="theme-toggle">
+    <div style={styles.container}>
+      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1>Sacha Fantacalcio Hub</h1>
+        <button onClick={toggleTheme} style={{ fontSize: "1.5rem", background: "none", border: "none" }}>
           {theme === "light" ? <FaMoon /> : <FaSun />}
         </button>
       </header>
 
-      <section className="section">
-        <h2><FaListUl /> Prossime Partite</h2>
-        <ul>
-          {upcomingMatches.map((m, i) => <li key={i}>{m}</li>)}
-        </ul>
+      <section style={styles.section}>
+        <h2>Prossime Partite</h2>
+        <ul>{upcomingMatches.map((m, i) => <li key={i}>{m}</li>)}</ul>
       </section>
 
-      <section className="section">
-        <h2><FaHeartbeat /> Infortuni</h2>
-        <ul>
-          {injuryHighlights.map((item, idx) => (
-            <li key={idx}><strong>{item.title}</strong></li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="section">
-        <h2><FaUsers /> Ultime Notizie</h2>
+      <section style={styles.section}>
+        <h2>Ultime Notizie</h2>
         {loadingNews ? <p>Caricamento notizie...</p> : (
-          <ul>
-            {(showAllNews ? news : news.slice(0, 10)).map((article, index) => (
-              <li key={index}>
-                <a href={article.guid} target="_blank" rel="noopener noreferrer">
-                  {article.title}
-                </a>
-                <p>{article.pubDate}</p>
-              </li>
-            ))}
-          </ul>
+          <ul>{news.slice(0, 10).map((n, i) => (
+            <li key={i}>
+              <strong>{n.title}</strong><br />
+              <span>{n.pubDate}</span>
+            </li>
+          ))}</ul>
         )}
       </section>
 
-      <section className="section">
+      <section style={styles.section}>
         <h2>Formazione AI</h2>
         <select value={selectedModulo} onChange={e => setSelectedModulo(e.target.value)}>
           {["3-4-3", "4-3-3", "3-5-2", "4-4-2", "4-5-1", "5-3-2"].map(m => (
             <option key={m} value={m}>{m}</option>
           ))}
         </select>
-        <button onClick={calculateOptimalFormation}>Calcola formazione</button>
+        <button onClick={calculateOptimalFormation} style={styles.button}>Calcola formazione</button>
         {formation && (
-          <div className="formation">
-            <h3>Modulo: {formation.modulo}</h3>
+          <div>
+            <h3>{formation.modulo}</h3>
             <p>🧤 {formation.titolari.filter(p => p.role === "P").map(p => p.name).join(" ")}</p>
             <p>🛡️ {formation.titolari.filter(p => p.role === "D").map(p => p.name).join(" – ")}</p>
             <p>🎯 {formation.titolari.filter(p => p.role === "C").map(p => p.name).join(" – ")}</p>
@@ -216,13 +225,8 @@ function App() {
           </div>
         )}
       </section>
-
-      <footer className="footer">
-        <p>© 2025 lunghi.ch - Tutti i diritti riservati.</p>
-      </footer>
     </div>
   );
 }
 
 export default App;
-
