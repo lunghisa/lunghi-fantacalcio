@@ -83,7 +83,7 @@ function App() {
       const filtered = players.filter((p) => p.role === role && !outNames.includes(p.name.toLowerCase()));
       filtered.sort((a, b) => parseFloat(b.fantamedia || 0) - parseFloat(a.fantamedia || 0));
       selected.push(...filtered.slice(0, schema[role]));
-    });
+    })
     const newFormation = { modulo: selectedModulo, titolari: selected };
     setFormation(newFormation);
     localStorage.setItem("formation", JSON.stringify(newFormation));
@@ -289,7 +289,7 @@ function App() {
       {(showAllNews ? news : news.slice(0, 10)).map((article, index) => (
         <li key={index} style={{ marginBottom: "1rem" }}>
           <a
-            href={article.link}
+            href={article.guid}
             target="_blank"
             rel="noopener noreferrer"
             style={{ fontWeight: "bold", color: "#1D4ED8", textDecoration: "none" }}
