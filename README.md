@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# FantaOracle
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Il fantacalcio predittivo.** Web app per Fantacalcio.it con un motore che analizza la tua rosa, prevede i punteggi della prossima giornata e ti dice come schierare per vincere.
 
-## Available Scripts
+🔗 Live: [lunghi.ch](https://www.lunghi.ch)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Modalità
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Standard** — punteggi sulla fantamedia reale stagionale. Numeri oggettivi, nessuna previsione.
+- **Oracle** — previsioni per la prossima giornata che si auto-correggono nel tempo coi voti reali.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Il motore Oracle
 
-### `npm test`
+Per ogni giocatore stima il punteggio atteso combinando:
+- fantamedia reale (con regressione per i campioni piccoli)
+- forma recente dai voti reali registrati
+- forza dell'avversario (rating attacco/difesa derivati dal listone)
+- fattore casa/trasferta
+- propensione al bonus (boom/bust vs costante)
+- segnale titolarità dalle news (🟢 titolare / 🟡 dubbio / 🔴 panchina)
+- malus infortunio dalle news in tempo reale
+- bias appreso per ruolo tramite auto-correzione
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Funzioni principali: top picks con motivazioni, slot rischiosi, modulo ottimale con
+"Schiera Oracle", strategia scontro diretto contro l'avversario di giornata, analisi
+post-partita dei punti lasciati in panchina, tracking dell'accuracy.
 
-### `npm run build`
+## Architettura
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **`index.html`** — app single-file in HTML/CSS/JS vanilla, senza framework, offline-capable.
+- **`api/feed.js`** — serverless function (Vercel) che fa da proxy affidabile ai feed RSS.
+- Auth e sincronizzazione cloud via **Supabase**. Stato per-lega in localStorage.
+- Parsing Excel via **SheetJS** (CDN). Font: Bebas Neue + DM Sans.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deploy
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+vercel --prod
+```
 
-### `npm run eject`
+App statica + serverless function in `api/`. Nessuno step di build.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Setup cloud (una tantum)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Per la sincronizzazione dello storico Oracle serve la tabella `oracle_states` su
+Supabase: eseguire `oracle_states_setup.sql` nel SQL Editor. Senza, l'app funziona
+comunque ma lo storico Oracle resta locale.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+© 2026 Sacha Lunghi
