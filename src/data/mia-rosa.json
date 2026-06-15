@@ -1,0 +1,128 @@
+[
+  {
+    "role": "P",
+    "name": "Falcone",
+    "team": "Lec",
+    "costo": "1",
+    "fantamedia": 0
+  },
+  {
+    "role": "P",
+    "name": "Fruchtl",
+    "team": "Lec",
+    "costo": "0",
+    "fantamedia": 0
+  },
+  {
+    "role": "P",
+    "name": "Provedel",
+    "team": "Laz",
+    "costo": "27",
+    "fantamedia": 0
+  },
+  {
+    "role": "P",
+    "name": "Furlanetto",
+    "team": "Laz",
+    "costo": "0",
+    "fantamedia": 0
+  },
+  {
+    "role": "P",
+    "name": "Mandas",
+    "team": "Laz",
+    "costo": "0",
+    "fantamedia": 0
+  },
+  {
+    "role": "P",
+    "name": "Samooja",
+    "team": "Lec",
+    "costo": "0",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "De Vrij",
+    "team": "Int",
+    "costo": "3",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Romagnoli",
+    "team": "Laz",
+    "costo": "8",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Pezzella Giu.",
+    "team": "Emp",
+    "costo": "6",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Hummels",
+    "team": "Rom",
+    "costo": "1",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Martin",
+    "team": "Gen",
+    "costo": "3",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Lykogiannis",
+    "team": "Bol",
+    "costo": "5",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Pavard",
+    "team": "Int",
+    "costo": "15",
+    "fantamedia": 0
+  },
+  {
+    "role": "D",
+    "name": "Bellanova",
+    "team": "Ata",
+    "costo": "24",
+    "fantamedia": 0
+  },
+  {
+    "role": "C",
+    "name": "Lazovic",
+    "team": "Ver",
+    "costo": "5",
+    "fantamedia": 0
+  },
+  {
+    "role": "C",
+    "name": "Barella",
+    "team": "Int",
+    "costo": "40",
+    "fantamedia": 0
+  },
+  {
+    "role": "C",
+    "name": "Nicolussi Caviglia",
+    "team": "Ven",
+    "costo": "50",
+    "fantamedia": 0
+  },
+  {
+    "role": "C",
+    "name": "Elmas",
+    "team": "Tor",
+    "costo": "7",
+    "fantamedia": 0
+  }
+]

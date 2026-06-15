@@ -1,0 +1,115 @@
+/* Tema base */
+.app.light {
+  --bg-color: #fefefe;
+  --text-color: #111;
+  --table-bg: #ffffffcc;
+}
+
+.app.dark {
+  --bg-color: #121212;
+  --text-color: #f1f1f1;
+  --table-bg: #1e1e1ecc;
+}
+
+/* Stile principale */
+.app {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Segoe UI", sans-serif;
+  padding: 1rem;
+  background-image: url("/background.png");
+  background-repeat: repeat;
+  background-size: 300px auto;
+  background-attachment: fixed;
+  background-blend-mode: overlay;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  font-size: 1.8rem;
+}
+
+header button {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* Sezioni */
+section {
+  margin-bottom: 2rem;
+}
+
+section h2 {
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid currentColor;
+}
+
+/* Tabelle */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--table-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 0.6rem 1rem;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+th {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+tr:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  transition: background 0.3s;
+}
+
+/* Colori ruoli */
+td.role-P {
+  color: orange;
+  font-weight: bold;
+}
+td.role-D {
+  color: green;
+}
+td.role-C {
+  color: dodgerblue;
+}
+td.role-A {
+  color: crimson;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  thead {
+    display: none;
+  }
+  td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+}
