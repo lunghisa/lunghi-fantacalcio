@@ -7194,6 +7194,8 @@ function enterApp(ev) {
     renderLeagueSwitcher();
     updateRosterStats();          // <- attiva onboarding hero se rosa vuota (punto 2)
     updateLeagueBanner();         // <- imposta saluto dinamico (punto 8)
+    // Admin: la prima schermata è il pannello Admin, non la Dashboard
+    if (currentUser && currentUser.is_admin) openAdminPanel();
     loadNews(false);
     setInterval(() => loadNews(true), AUTO_REFRESH_MIN * 60 * 1000);
     updateUserPill();
